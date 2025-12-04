@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: jwt-service
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/exercise_jwts
+    username: root
+    password: mysql_pw
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  security:
+    user:
+      password: 123456
+server:
+  port: 8080
+  servlet:
+    context-path: /exercise
+jwt:
+  signing:
+    key: "a-string-secret-at-least-256-bits-long"
+  expiration: 1800000
+  refresh-expiration: 604800000
+
