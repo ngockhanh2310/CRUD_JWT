@@ -19,7 +19,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @Operation(summary = "Register a new user and return tokens")
+    @Operation(summary = "Register a new user and return information")
     @PostMapping("/register")
     public ApiResponse<RegisterResponse> register(
             @Valid @RequestBody RegisterRequest request
