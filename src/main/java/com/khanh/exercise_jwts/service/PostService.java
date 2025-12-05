@@ -29,6 +29,16 @@ public class PostService {
         return userRepository.findByUsername(auth.getName()).orElseThrow();
     }
 
+    private boolean isAdmin(User user) {
+        return user.getRoles().contains(Role.ROLE_ADMIN);
+    }
+
+    private void ensureOwnerOrAdmin(Post p, User me) {
+        boolean isOwner = p.getAuthor().getId().equals(me.getId());
+        boolean isAdmin = isAdmin(me);
+        if (!isOwner && !isAdmin) throw new AccessDeniedException("Not allowed");
+    }
+
     public List<PostDto> listApproved() {
         return postRepository.findAllByStatus(PostStatus.APPROVED).stream().map(postMapper::toDto).toList();
     }
@@ -54,9 +64,8 @@ public class PostService {
     public PostDto update(Long id, PostCreateRequest req) {
         Post p = postRepository.findById(id).orElseThrow();
         User me = currentUser();
-        boolean isOwner = p.getAuthor().getId().equals(me.getId());
-        boolean isAdmin = me.getRoles().contains(Role.ROLE_ADMIN);
-        if (!isOwner && !isAdmin) throw new AccessDeniedException("Not allowed");
+        ensureOwnerOrAdmin(p, me);
+        boolean isAdmin = isAdmin(me);
         p.setTitle(req.title());
         p.setContent(req.content());
         // After update by owner, set back to pending for re-approval unless admin
@@ -67,9 +76,7 @@ public class PostService {
     public void delete(Long id) {
         Post p = postRepository.findById(id).orElseThrow();
         User me = currentUser();
-        boolean isOwner = p.getAuthor().getId().equals(me.getId());
-        boolean isAdmin = me.getRoles().contains(Role.ROLE_ADMIN);
-        if (!isOwner && !isAdmin) throw new AccessDeniedException("Not allowed");
+        ensureOwnerOrAdmin(p, me);
         postRepository.delete(p);
     }
 

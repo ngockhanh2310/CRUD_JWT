@@ -33,7 +33,9 @@ public class UserService {
         return userRepository.findByUsername(auth.getName()).orElseThrow();
     }
 
-    public UserDto getProfile() { return userMapper.toDto(getCurrentUser()); }
+    public UserDto getProfile() {
+        return userMapper.toDto(getCurrentUser());
+    }
 
     public UserDto updateProfile(UpdateProfileRequest req) {
         User user = getCurrentUser();
@@ -51,7 +53,9 @@ public class UserService {
     }
 
     // Admin actions
-    public List<UserDto> listUsers() { return userRepository.findAll().stream().map(userMapper::toDto).toList(); }
+    public List<UserDto> listUsers() {
+        return userRepository.findAll().stream().map(userMapper::toDto).toList();
+    }
 
     public UserDto addRole(Long userId, Role role) {
         User u = userRepository.findById(userId).orElseThrow();
