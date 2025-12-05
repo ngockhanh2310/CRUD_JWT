@@ -4,6 +4,7 @@ import com.khanh.exercise_jwts.dto.request.AuthenticateRequest;
 import com.khanh.exercise_jwts.dto.request.RegisterRequest;
 import com.khanh.exercise_jwts.dto.response.ApiResponse;
 import com.khanh.exercise_jwts.dto.response.AuthenticateResponse;
+import com.khanh.exercise_jwts.dto.response.RegisterResponse;
 import com.khanh.exercise_jwts.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -20,10 +21,10 @@ public class AuthenticationController {
 
     @Operation(summary = "Register a new user and return tokens")
     @PostMapping("/register")
-    public ApiResponse<AuthenticateResponse> register(
+    public ApiResponse<RegisterResponse> register(
             @Valid @RequestBody RegisterRequest request
     ) {
-        return ApiResponse.<AuthenticateResponse>builder()
+        return ApiResponse.<RegisterResponse>builder()
                 .success(true)
                 .message("User registered successfully")
                 .data(authenticationService.register(request))

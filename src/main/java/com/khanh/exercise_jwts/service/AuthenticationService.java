@@ -3,8 +3,10 @@ package com.khanh.exercise_jwts.service;
 import com.khanh.exercise_jwts.dto.request.AuthenticateRequest;
 import com.khanh.exercise_jwts.dto.request.RegisterRequest;
 import com.khanh.exercise_jwts.dto.response.AuthenticateResponse;
+import com.khanh.exercise_jwts.dto.response.RegisterResponse;
 import com.khanh.exercise_jwts.entity.User;
 import com.khanh.exercise_jwts.enums.Role;
+import com.khanh.exercise_jwts.mapper.AuthMapper;
 import com.khanh.exercise_jwts.repository.TokenRepository;
 import com.khanh.exercise_jwts.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -21,6 +23,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+    private final AuthMapper authMapper;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
@@ -29,23 +32,17 @@ public class AuthenticationService {
     private final TokenService tokenService;
 
     @Transactional
-    public AuthenticateResponse register(RegisterRequest request) {
+    public RegisterResponse register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.username())) {
             throw new IllegalArgumentException("Username already exists");
         }
         if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("Email already exists");
         }
-        User user = User.builder()
-                .username(request.username())
-                .email(request.email())
-                .password(passwordEncoder.encode(request.password()))
-                .fullName(request.fullName())
-                .roles(Set.of(Role.ROLE_USER))
-                .build();
-        userRepository.save(user);
-
-        return issueNewTokens(user);
+        var user = authMapper.toUserRegister(request);
+        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setRoles(Set.of(Role.USER));
+        return authMapper.toRegisterResponse(userRepository.save(user));
     }
 
     @Transactional

@@ -30,7 +30,7 @@ public class PostService {
     }
 
     private boolean isAdmin(User user) {
-        return user.getRoles().contains(Role.ROLE_ADMIN);
+        return user.getRoles().contains(Role.ADMIN);
     }
 
     private void ensureOwnerOrAdmin(Post p, User me) {

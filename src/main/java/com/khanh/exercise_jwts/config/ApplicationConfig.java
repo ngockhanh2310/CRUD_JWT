@@ -50,7 +50,7 @@ public class ApplicationConfig {
                 var user = User.builder()
                         .username("admin")
                         .password(passwordEncoder().encode("12345678"))
-                        .roles(Set.of(Role.ROLE_ADMIN))
+                        .roles(Set.of(Role.ADMIN))
                         .email("admin@admin.dev.vn")
                         .build();
                 userRepository.save(user);
