@@ -19,10 +19,10 @@ public class JwtUtils {
 
     private final Key signingKey;
 
-    // 30 minutes for access token
+    // 30 minutes for an access token
     @Value("${jwt.expiration}")
     private long accessExpirationMillis;
-    // 7 days for refresh token
+    // 7 days for a refresh token
     @Value("${jwt.refresh-expiration}")
     private long refreshExpirationMillis;
 
