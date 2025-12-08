@@ -57,9 +57,9 @@ public class JwtUtils {
     public boolean validateToken(String token) {
         try {
             parseClaims(token);
-            return false;
-        } catch (JwtException | IllegalArgumentException e) {
             return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
         }
     }
 
