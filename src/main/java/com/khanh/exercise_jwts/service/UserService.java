@@ -54,7 +54,7 @@ public class UserService {
         if (!isSameAsOld) {
             user.setPassword(passwordEncoder.encode(req.newPassword()));
         } else {
-            throw new IllegalArgumentException("Mật khẩu mới không được giống mật khẩu cũ.");
+            throw new IllegalArgumentException("The new password cannot be the same as the old password.");
         }
         return userMapper.toDto(userRepository.save(user));
     }
