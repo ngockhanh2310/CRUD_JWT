@@ -46,8 +46,15 @@ public class UserService {
             user.setEmail(req.email());
         }
         if (req.fullName() != null) user.setFullName(req.fullName());
-        if (req.newPassword() != null && !req.newPassword().isBlank()) {
+        boolean isSameAsOld = passwordEncoder.matches(
+                req.newPassword(),
+                user.getPassword()
+        );
+
+        if (!isSameAsOld) {
             user.setPassword(passwordEncoder.encode(req.newPassword()));
+        } else {
+            throw new IllegalArgumentException("Mật khẩu mới không được giống mật khẩu cũ.");
         }
         return userMapper.toDto(userRepository.save(user));
     }
