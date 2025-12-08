@@ -44,6 +44,8 @@ public class JwtUtils {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
+                .setIssuer("khanh")
+                .setHeaderParam("typ", "JWT")
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plusMillis(ttlMillis)))
                 .signWith(signingKey, SignatureAlgorithm.HS256)
