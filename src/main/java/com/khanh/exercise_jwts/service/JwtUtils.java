@@ -27,7 +27,7 @@ public class JwtUtils {
     private long refreshExpirationMillis;
 
     public JwtUtils(@Value("${jwt.signing.key}") String secret) {
-        byte[] keyBytes = Decoders.BASE64.decode(ensureBase64(secret));
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.signingKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -81,16 +81,5 @@ public class JwtUtils {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    private String ensureBase64(String secret) {
-        // if already Base64, decoding will succeed. If not, encode as base64 by padding using hex approach is not here.
-        // For simplicity, if not base64, we will base64-encode the original string bytes.
-        try {
-            Decoders.BASE64.decode(secret);
-            return secret;
-        } catch (Exception ex) {
-            return io.jsonwebtoken.io.Encoders.BASE64.encode(secret.getBytes());
-        }
     }
 }
